@@ -1,0 +1,78 @@
+{
+    "XEXPIRE": {
+        "summary": "Sets the expiration time of a stream with multiple IDs in seconds or milliseconds.",
+        "group": "stream",
+        "since": "7.2.5",
+        "arity": -3,
+        "function": "xexpireCommand",
+        "command_flags": [
+            "WRITE",
+            "FAST"
+        ],
+        "acl_categories": [
+            "KEYSPACE",
+            "STREAM"
+        ],
+        "key_specs": [
+            {
+                "flags": [
+                    "RW",
+                    "UPDATE"
+                ],
+                "begin_search": {
+                    "index": {
+                        "pos": 1
+                    }
+                },
+                "find_keys": {
+                    "range": {
+                        "lastkey": 0,
+                        "step": 1,
+                        "limit": 0
+                    }
+                }
+            }
+        ],
+        "reply_schema": {
+            "oneOf": [
+                {
+                    "description": "The given stream does not exist.",
+                    "const": -1
+                },
+                {
+                    "description": "The timeout was set.",
+                    "type": "integer",
+                    "minimum": 0
+                }
+            ]
+        },
+        "arguments": [
+            {
+                "name": "key",
+                "type": "key",
+                "key_spec_index": 0
+            },
+            {
+                "name": "condition",
+                "type": "oneof",
+                "arguments": [
+                    {
+                        "name": "seconds",
+                        "type": "integer",
+                        "token": "EX"
+                    },
+                    {
+                        "name": "milliseconds",
+                        "type": "integer",
+                        "token": "PX"
+                    }
+                ]
+            },
+            {
+                "name": "ID",
+                "type": "string",
+                "multiple": true
+            }
+        ]
+    }
+}

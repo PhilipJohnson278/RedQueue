@@ -1,0 +1,86 @@
+{
+    "XTTL": {
+        "summary": "Returns the expiration time in milliseconds of multiple item IDs with given stream.",
+        "group": "stream",
+        "since": "7.2.5",
+        "arity": -2,
+        "function": "xttlCommand",
+        "command_flags": [
+            "READONLY",
+            "FAST"
+        ],
+        "acl_categories": [
+            "KEYSPACE",
+            "STREAM"
+        ],
+        "command_tips": [
+            "NONDETERMINISTIC_OUTPUT"
+        ],
+        "key_specs": [
+            {
+                "flags": [
+                    "RO",
+                    "ACCESS"
+                ],
+                "begin_search": {
+                    "index": {
+                        "pos": 1
+                    }
+                },
+                "find_keys": {
+                    "range": {
+                        "lastkey": 0,
+                        "step": 1,
+                        "limit": 0
+                    }
+                }
+            }
+        ],
+        "reply_schema": {
+            "oneOf": [
+                {
+                    "description": "The given stream does not exist.",
+                    "const": -1
+                },
+                {
+                    "description": "List of stream item ID with TTL.",
+                    "type": "array",
+                    "items": {
+                        "description": "Stream item ID with TTL.",
+                        "type": "array",
+                        "minItems": 2,
+                        "maxItems": 2,
+                        "items": [
+                            {
+                                "description": "Stream item ID.",
+                                "type": "string"
+                            },
+                            {
+                                "description": "TTL in milliseconds.",
+                                "type": "string"
+                            }
+                        ]
+                    }
+            }
+            ]
+        },
+        "arguments": [
+            {
+                "name": "stream",
+                "type": "block",
+                "arguments": [
+                    {
+                        "name": "key",
+                        "type": "key",
+                        "key_spec_index": 0
+                    },
+                    {
+                        "name": "ID",
+                        "type": "string",
+                        "multiple": true
+                    }
+                ]
+            }
+        ]
+    }
+}
